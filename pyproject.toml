@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "flask-todo-app"
+version = "0.1.0"
+description = ""
+authors = ["Francisco Pantoja <franciscopantojag98@gmail.com>"]
+readme = "README.md"
+packages = [{include = "flask_todo_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^2.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
