@@ -1,8 +1,8 @@
 import os
-from flask import Flask, session, render_template, redirect
+from flask import Flask, render_template, g
 from flask_todo_app.helpers import login_required
 from flask_todo_app.db import get_db
-from flask_todo_app import auth, todo
+from flask_todo_app import auth, todo, db
 
 
 def create_app():
@@ -20,25 +20,14 @@ def create_app():
     except OSError:
         pass
 
-    from flask_todo_app import db
     db.init_app(app)
 
     @app.route('/')
     @login_required
     def index():
-        db = get_db()
-        user_id = session.get('user_id')
-
-        user = db.execute(
-            'SELECT username FROM users WHERE id = ?', (user_id,)).fetchone()
-
-        if not user:
-            session.clear()
-            return redirect('/login')
-
-        todos = db.execute(
-            'SELECT todo, deadline, id, done FROM todos WHERE user_id=?', (user_id,)).fetchall()
-        return render_template('index.html', todos=todos, user=user)
+        todos = get_db().execute(
+            'SELECT todo, deadline, id, done FROM todos WHERE user_id=?', (g.user['id'],)).fetchall()
+        return render_template('index.html', todos=todos, user=g.user)
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(todo.bp)
