@@ -14,7 +14,7 @@ def create_app():
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",
         # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
+        DATABASE=os.path.join(app.instance_path, "todo.sqlite"),
     )
 
     # ensure the instance folder exists
@@ -40,7 +40,7 @@ def create_app():
 
         todos = db.execute(
             'SELECT todo, deadline, id, done FROM todos WHERE user_id=?', (user_id,)).fetchall()
-        return render_template('index.html.jinja2', todos=todos, user=user)
+        return render_template('index.html', todos=todos, user=user)
     
     app.register_blueprint(auth.bp)
     app.register_blueprint(todo.bp)

@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: app
+    build: .
+    command: bash -c "flask --app flask_todo_app init-db && flask --app flask_todo_app run --debug -h 0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - 5000:5000
+    restart: always
