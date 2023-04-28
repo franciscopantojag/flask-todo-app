@@ -1,11 +1,8 @@
 import os
-from flask import Flask, session, render_template, redirect, request, flash, g
+from flask import Flask, session, render_template, redirect
 from flask_todo_app.helpers import login_required
 from flask_todo_app.db import get_db
 from flask_todo_app import auth, todo
-from werkzeug.security import generate_password_hash, check_password_hash
-import re
-from datetime import datetime
 
 
 def create_app():
@@ -32,7 +29,8 @@ def create_app():
         db = get_db()
         user_id = session.get('user_id')
 
-        user = db.execute('SELECT username FROM users WHERE id = ?', (user_id,)).fetchone()
+        user = db.execute(
+            'SELECT username FROM users WHERE id = ?', (user_id,)).fetchone()
 
         if not user:
             session.clear()
@@ -41,7 +39,7 @@ def create_app():
         todos = db.execute(
             'SELECT todo, deadline, id, done FROM todos WHERE user_id=?', (user_id,)).fetchall()
         return render_template('index.html', todos=todos, user=user)
-    
+
     app.register_blueprint(auth.bp)
     app.register_blueprint(todo.bp)
 

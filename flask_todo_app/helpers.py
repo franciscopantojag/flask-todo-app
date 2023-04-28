@@ -14,5 +14,5 @@ def login_required(f):
             session.clear()
             return redirect("/auth/login")
         g.user = user
-        return f(*args, **kwargs) 
+        return f(*args, **kwargs)
     return decorated_function
