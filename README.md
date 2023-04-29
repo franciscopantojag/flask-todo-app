@@ -8,12 +8,6 @@ This app was created using Flask, it was my final project for [cs50x](https://cs
 
 ## Build / Run
 
-1. Build app
 ```sh
-$ docker-compose build
-```
-
-2. Start the app:
-```sh
-$ docker-compose up
+$ docker-compose up --build
 ```
