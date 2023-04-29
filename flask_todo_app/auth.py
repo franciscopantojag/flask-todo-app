@@ -1,18 +1,15 @@
 from flask import Blueprint, request, session, redirect, render_template, flash
 from flask_todo_app.db import get_db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_todo_app.helpers import redirect_index_if_user
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 @bp.route('/login', methods=['GET', 'POST'])
+@redirect_index_if_user
 def login():
     if request.method == 'GET':
-        user_id = session.get('user_id')
-        if user_id:
-            user = get_db().execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-            if user:
-                return redirect('/')
         return render_template('login.html')
 
     username = request.form.get('username')
@@ -46,13 +43,9 @@ def logout():
 
 
 @bp.route('/register', methods=["GET", "POST"])
+@redirect_index_if_user
 def register():
     if request.method == "GET":
-        user_id = session.get('user_id')
-        if user_id:
-            user = get_db().execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-            if user:
-                return redirect('/')
         return render_template('login.html', register=True)
 
     username = request.form.get('username', '').strip()
